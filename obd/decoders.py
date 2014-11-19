@@ -132,8 +132,8 @@ def fuel_pres_direct(_hex):
 # -8192 to 8192 Pa
 def evap_pressure(_hex):
 	# decode the twos complement
-	a = twos_comp(unhex(_hex[0:2], 8))
-	b = twos_comp(unhex(_hex[2:4], 8))
+	a = twos_comp(unhex(_hex[0:2]) 8)
+	b = twos_comp(unhex(_hex[2:4]) 8)
 	v = ((a * 256.0) + b) / 4.0
 	return (v, Unit.PA)
 
