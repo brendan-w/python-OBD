@@ -29,22 +29,25 @@
 #                                                                      #
 ########################################################################
 
+
 class Debug():
-	def __init__(self):
-		self.console = False
-		self.handler = None
 
-	def __call__(self, msg, forcePrint=False):
+    def __init__(self):
+        self.console = False
+        self.handler = None
 
-		if self.console or forcePrint:
-			print("[obd] " + str(msg))
+    def __call__(self, msg, forcePrint=False):
 
-		if hasattr(self.handler, '__call__'):
-			self.handler(msg)
+        if self.console or forcePrint:
+            print("[obd] " + str(msg))
+
+        if hasattr(self.handler, '__call__'):
+            self.handler(msg)
 
 debug = Debug()
 
 
 class ProtocolError(Exception):
-	def __init__(self):
-		pass
+
+    def __init__(self):
+        pass
