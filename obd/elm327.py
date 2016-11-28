@@ -103,7 +103,7 @@ class ELM327:
 
 
 
-    def __init__(self, portname, baudrate, protocol):
+    def __init__(self, portname, baudrate, protocol, headers):
         """Initializes port by resetting device and gettings supported PIDs. """
 
         logger.info("Initializing ELM327: PORT=%s BAUD=%s PROTOCOL=%s" %
@@ -163,6 +163,13 @@ class ELM327:
         if not self.__isok(r):
             self.__error("ATL0 did not return 'OK'")
             return
+
+        # ------------------------ set headers --------------------------------
+        if headers is not None:
+            r = self.__send(b"ATSH%X"%headers)
+            if not self.__isok(r):
+                self.__error("ATSH did not return 'OK'")
+                return
 
         # by now, we've successfuly communicated with the ELM, but not the car
         self.__status = OBDStatus.ELM_CONNECTED
