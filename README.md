@@ -2,7 +2,7 @@ python-OBD
 ==========
 
 A python module for handling realtime sensor data from OBD-II vehicle
-ports. Works with ELM327 OBD-II adapters, and is fit for the Raspberry
+ports. Works with ELM327 OBD-II adapters. Is fit for the Raspberry
 Pi.
 
 Installation
