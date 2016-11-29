@@ -44,8 +44,9 @@ class LegacyProtocol(Protocol):
     TX_ID_ENGINE = 0x10
 
 
-    def __init__(self, lines_0100):
+    def __init__(self, lines_0100, allow_long_messages):
         Protocol.__init__(self, lines_0100)
+        self.__allow_long_messages = allow_long_messages
 
 
     def parse_frame(self, frame):
@@ -63,7 +64,7 @@ class LegacyProtocol(Protocol):
             logger.debug("Dropped frame for being too short")
             return False
 
-        if len(raw_bytes) > 11:
+        if len(raw_bytes) > 11 and not self.__allow_long_messages:
             logger.debug("Dropped frame for being too long")
             return False
 
@@ -180,33 +181,33 @@ class LegacyProtocol(Protocol):
 class SAE_J1850_PWM(LegacyProtocol):
     ELM_NAME = "SAE J1850 PWM"
     ELM_ID = "1"
-    def __init__(self, lines_0100):
-        LegacyProtocol.__init__(self, lines_0100)
+    def __init__(self, lines_0100, allow_long_messages):
+        LegacyProtocol.__init__(self, lines_0100, allow_long_messages)
 
 
 class SAE_J1850_VPW(LegacyProtocol):
     ELM_NAME = "SAE J1850 VPW"
     ELM_ID = "2"
-    def __init__(self, lines_0100):
-        LegacyProtocol.__init__(self, lines_0100)
+    def __init__(self, lines_0100, allow_long_messages):
+        LegacyProtocol.__init__(self, lines_0100, allow_long_messages)
 
 
 class ISO_9141_2(LegacyProtocol):
     ELM_NAME = "ISO 9141-2"
     ELM_ID = "3"
-    def __init__(self, lines_0100):
-        LegacyProtocol.__init__(self, lines_0100)
+    def __init__(self, lines_0100, allow_long_messages):
+        LegacyProtocol.__init__(self, lines_0100, allow_long_messages)
 
 
 class ISO_14230_4_5baud(LegacyProtocol):
     ELM_NAME = "ISO 14230-4 (KWP 5BAUD)"
     ELM_ID = "4"
-    def __init__(self, lines_0100):
-        LegacyProtocol.__init__(self, lines_0100)
+    def __init__(self, lines_0100, allow_long_messages):
+        LegacyProtocol.__init__(self, lines_0100, allow_long_messages)
 
 
 class ISO_14230_4_fast(LegacyProtocol):
     ELM_NAME = "ISO 14230-4 (KWP FAST)"
     ELM_ID = "5"
-    def __init__(self, lines_0100):
-        LegacyProtocol.__init__(self, lines_0100)
+    def __init__(self, lines_0100, allow_long_messages):
+        LegacyProtocol.__init__(self, lines_0100, allow_long_messages)
