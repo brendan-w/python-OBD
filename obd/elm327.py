@@ -462,7 +462,7 @@ class ELM327:
             buffer = buffer[:-1]
 
         # convert bytes into a standard string
-        string = buffer.decode()
+        string = buffer.decode("utf-8", "ignore")
 
         # splits into lines while removing empty lines and trailing spaces
         lines = [ s.strip() for s in re.split("[\r\n]", string) if bool(s) ]
