@@ -39,7 +39,7 @@
 
 from .__version__ import __version__
 from .obd import OBD
-from .async import Async
+from .asynchronous import Async
 from .commands import commands
 from .OBDCommand import OBDCommand
 from .OBDResponse import OBDResponse
