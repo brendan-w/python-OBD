@@ -61,6 +61,30 @@ class Async(OBD):
         return self.__running
 
 
+    def main_loop(self):
+        """ Starts the async update loop without using thread """
+        if not self.is_connected():
+            logger.info("Async thread not started because no connection was made")
+            return
+
+        if len(self.__commands) == 0:
+            logger.info("Async thread not started because no commands were registered")
+            return
+
+        if self.__thread is None:
+            logger.info("Starting async thread")
+            self.__running = True
+            try:
+                self.__thread = Async.main_loop
+                self.run()
+            except Exception as e:
+                logger.info('Exception %s' % str(e))
+            if self.__thread is not None:
+                assert self.__thread == Async.main_loop
+                self.__running = False
+                self.__thread = None
+
+
     def start(self):
         """ Starts the async update loop """
         if not self.is_connected():
