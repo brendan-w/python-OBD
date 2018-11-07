@@ -299,12 +299,14 @@ def fuel_status(messages):
     status_2 = ""
 
     if bits[0:8].count(True) == 1:
-        status_1 = FUEL_STATUS[ 7 - bits[0:8].index(True) ]
+        if 7 - bits[0:8].index(True) < len(FUEL_STATUS):
+            status_1 = FUEL_STATUS[ 7 - bits[0:8].index(True) ]
     else:
         logger.debug("Invalid response for fuel status (multiple/no bits set)")
 
     if bits[8:16].count(True) == 1:
-        status_2 = FUEL_STATUS[ 7 - bits[8:16].index(True) ]
+        if 7 - bits[8:16].index(True) < len(FUEL_STATUS):
+            status_2 = FUEL_STATUS[ 7 - bits[8:16].index(True) ]
     else:
         logger.debug("Invalid response for fuel status (multiple/no bits set)")
 
