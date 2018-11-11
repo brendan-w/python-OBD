@@ -234,6 +234,9 @@ def elm_voltage(messages):
     # doesn't register as a normal OBD response,
     # so access the raw frame data
     v = messages[0].frames[0].raw
+    # Some ELMs provide float V (for example messages[0].frames[0].raw => u'12.3V'
+    v = v.lower()
+    v = v.replace('v', '')
 
     try:
         return float(v) * Unit.volt
