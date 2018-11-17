@@ -289,7 +289,10 @@ class ELM327:
             # The first character might get eaten if the interface was busy,
             # so write a second one (again so that the lone CR doesn't repeat
             # the previous command)
-            self.__port.write(b"\x7F\x7F\r\n")
+
+            # All commands should be terminated with carriage return according 
+            # to ELM327 and STN11XX specifications
+            self.__port.write(b"\x7F\x7F\r")
             self.__port.flush()
             response = self.__port.read(1024)
             logger.debug("Response from baud %d: %s" % (baud, repr(response)))
@@ -415,7 +418,7 @@ class ELM327:
         """
 
         if self.__port:
-            cmd += b"\r\n" # terminate
+            cmd += b"\r" # terminate with carriage return in accordance with ELM327 and STN11XX specifications
             logger.debug("write: " + repr(cmd))
             self.__port.flushInput() # dump everything in the input buffer
             self.__port.write(cmd) # turn the string into bytes and write
