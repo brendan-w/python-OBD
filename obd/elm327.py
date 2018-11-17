@@ -290,12 +290,14 @@ class ELM327:
             # so write a second one (again so that the lone CR doesn't repeat
             # the previous command)
             self.__port.write(b"\x7F\x7F\r\n")
+            self.__port.write(b"ATZ\r\n")
             self.__port.flush()
+            time.sleep(1)
             response = self.__port.read(1024)
             logger.debug("Response from baud %d: %s" % (baud, repr(response)))
 
             # watch for the prompt character
-            if response.endswith(b">"):
+            if response.endswith(self.ELM_PROMPT):
                 logger.debug("Choosing baud %d" % baud)
                 self.__port.timeout = timeout # reinstate our original timeout
                 return True
