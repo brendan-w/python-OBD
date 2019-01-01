@@ -283,7 +283,7 @@ class ELM327:
     def set_baudrate(self, baud):
         if baud is None:
             # when connecting to pseudo terminal, don't bother with auto baud
-            if self.port_name().startswith("/dev/pts"):
+            if self.get_port_name().startswith("/dev/pts"):
                 logger.debug("Detected pseudo terminal, skipping baudrate setup")
                 return True
             else:
@@ -358,29 +358,36 @@ class ELM327:
         logger.error(str(msg))
 
 
-    def port_name(self):
+    def get_port_name(self):
         if self.__port is not None:
             return self.__port.portstr
         else:
             return ""
 
 
-    def status(self):
-        return self.__status
+    def get_port_baudrate(self):
+        if self.__port is not None:
+            return self.__port.baudrate
+        else:
+            return ""
 
 
-    def ecus(self):
-        return self.__protocol.ecu_map.values()
-
-
-    def protocol_name(self):
+    def get_protocol_name(self):
         return self.__protocol.ELM_NAME
 
 
-    def protocol_id(self):
+    def get_protocol_id(self):
         return self.__protocol.ELM_ID
 
 
+    def get_ecus(self):
+        return self.__protocol.ecu_map.values()
+
+
+    def status(self):
+        return self.__status
+    
+    
     def close(self):
         """
             Resets the device, and sets all
