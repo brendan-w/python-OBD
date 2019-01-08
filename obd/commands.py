@@ -287,15 +287,17 @@ __mode7__ = [
 
 __mode9__ = [
     #                      name                             description                    cmd  bytes       decoder           ECU        fast
-    # OBDCommand("PIDS_9A"                    , "Supported PIDs [01-20]"                  , b"0900", 4, pid,                   ECU.ENGINE,  True),
-    # OBDCommand("VIN_MESSAGE_COUNT"          , "VIN Message Count"                       , b"0901", 1, uas(0x01),             ECU.ENGINE,  True),
-    # OBDCommand("VIN"                        , "Get Vehicle Identification Number"       , b"0902", 20, raw_string,           ECU.ENGINE,  True),
+    OBDCommand("PIDS_9A"                    , "Supported PIDs [01-20]"                  , b"0900", 4, pid,                   ECU.ENGINE,  True),
+    OBDCommand("VIN_MESSAGE_COUNT"          , "VIN Message Count"                       , b"0901", 1, uas(0x01),             ECU.ENGINE,  True),
+    OBDCommand("VIN"                        , "Get Vehicle Identification Number"       , b"0902", 20, raw_string,           ECU.ENGINE,  True),
 ]
 
 __misc__ = [
     #                      name                             description                    cmd  bytes       decoder           ECU        fast
     OBDCommand("ELM_VERSION"                , "ELM327 version string"                   , b"ATI",  0, raw_string,            ECU.UNKNOWN, False),
     OBDCommand("ELM_VOLTAGE"                , "Voltage detected by OBD-II adapter"      , b"ATRV", 0, elm_voltage,           ECU.UNKNOWN, False),
+    OBDCommand("FAKE_COMMAND_1"             , "Non-existing command returning error"    , b"ATXYZ", 0, raw_string,           ECU.UNKNOWN, False),
+
 ]
 
 

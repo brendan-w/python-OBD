@@ -23,7 +23,7 @@ class FakeELM:
         self._status = OBDStatus.CAR_CONNECTED
         self._last_command = None
 
-    def port_name(self):
+    def get_port_name(self):
         return self._portname
 
     def status(self):
@@ -32,10 +32,10 @@ class FakeELM:
     def ecus(self):
         return [ ECU.ENGINE, ECU.UNKNOWN ]
 
-    def protocol_name(self):
+    def get_protocol_name(self):
         return "ISO 15765-4 (CAN 11/500)"
 
-    def protocol_id(self):
+    def get_protocol_id(self):
         return "6"
 
     def close(self):
@@ -122,30 +122,30 @@ def test_port_name():
     """
     o = obd.OBD("/dev/null")
     o.interface = FakeELM("/dev/null")
-    assert o.port_name() == o.interface._portname
+    assert o.get_port_name() == o.interface.get_port_name()
 
     o.interface = FakeELM("A different port name")
-    assert o.port_name() == o.interface._portname
+    assert o.get_port_name() == o.interface.get_port_name()
 
 
 def test_protocol_name():
     o = obd.OBD("/dev/null")
 
     o.interface = None
-    assert o.protocol_name() == ""
+    assert o.get_protocol_name() == ""
 
     o.interface = FakeELM("/dev/null")
-    assert o.protocol_name() == o.interface.protocol_name()
+    assert o.get_protocol_name() == o.interface.get_protocol_name()
 
 
 def test_protocol_id():
     o = obd.OBD("/dev/null")
 
     o.interface = None
-    assert o.protocol_id() == ""
+    assert o.get_protocol_id() == ""
 
     o.interface = FakeELM("/dev/null")
-    assert o.protocol_id() == o.interface.protocol_id()
+    assert o.get_protocol_id() == o.interface.get_protocol_id()
 
 
 

@@ -176,40 +176,46 @@ class OBD(object):
             return self.interface.status()
 
 
-    # not sure how useful this would be
-
-    # def ecus(self):
-    #     """ returns a list of ECUs in the vehicle """
-    #     if self.interface is None:
-    #         return []
-    #     else:
-    #         return self.interface.ecus()
+    def get_ecus(self):
+        """ returns a list of ECUs in the vehicle """
+        if self.interface is None:
+            return []
+        else:
+            return self.interface.get_ecus()
 
 
-    def protocol_name(self):
+    def get_protocol_name(self):
         """ returns the name of the protocol being used by the ELM327 """
         if self.interface is None:
             return ""
         else:
-            return self.interface.protocol_name()
+            return self.interface.get_protocol_name()
 
 
-    def protocol_id(self):
+    def get_protocol_id(self):
         """ returns the ID of the protocol being used by the ELM327 """
         if self.interface is None:
             return ""
         else:
-            return self.interface.protocol_id()
+            return self.interface.get_protocol_id()
 
 
-    def port_name(self):
+    def get_port_name(self):
         """ Returns the name of the currently connected port """
         if self.interface is not None:
-            return self.interface.port_name()
+            return self.interface.get_port_name()
         else:
             return ""
 
 
+    def get_port_baudrate(self):
+        """ Returns the speed of the currently connected port """
+        if self.interface is not None:
+            return str(self.interface.get_port_baudrate())
+        else:
+            return ""
+        
+        
     def is_connected(self):
         """
             Returns a boolean for whether a connection with the car was made.
@@ -228,13 +234,46 @@ class OBD(object):
         for c in self.supported_commands:
             print(str(c))
 
+    def print_discovered(self):
+        """
+            Utility function meant to print all information discovered:
+            protocol, port name, port baudrate and all supported commands.
+        """
+        if self.interface is not None:
+            print ("The following settings were used to connect to the ECU:")
+            print ("Protocole: " + self.get_protocol_name())
+            print ("Port name: " + self.get_port_name())
+            print ("Port rate: " + self.get_port_baudrate())
+            print ("The following OBD commands are supported:")
 
+            _mylist=[]
+            for c in self.supported_commands:
+                _mylist.append(str(c))
+            _mylist.sort()
+            for i in _mylist:
+                print (i)
+            
+        else:
+            print ("Impossible to print discovered information: no connection to the ECU.")
+            
     def supports(self, cmd):
         """
             Returns a boolean for whether the given command
             is supported by the car
         """
         return cmd in self.supported_commands
+    
+    
+    def get_supported_commands(self):
+        """
+            Returns a list of commands
+            supported by the car
+        """
+
+        if self.interface is not None:
+            return self.supported_commands
+        else:
+            return []
 
 
     def test_cmd(self, cmd, warn=True):
@@ -249,7 +288,7 @@ class OBD(object):
             return False
 
         # mode 06 is only implemented for the CAN protocols
-        if cmd.mode == 6 and self.interface.protocol_id() not in ["6", "7", "8", "9"]:
+        if cmd.mode == 6 and self.interface.get_protocol_id() not in ["6", "7", "8", "9"]:
             if warn:
                 logger.warning("Mode 06 commands are only supported over CAN protocols")
             return False

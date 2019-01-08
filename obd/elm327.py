@@ -101,6 +101,24 @@ class ELM327:
     # going to be less picky about the time required to detect it.
     _TRY_BAUDS = [ 38400, 9600, 230400, 115200, 57600, 19200 ]
 
+    _ERROR_MESSAGES = [
+            [b"?",                    "?: ELM327 reports misundersting command received on the RS232 input."],
+            [b"ACT ALERT",            "ACT ALERT: ELM327 warns no RS232 activity. Might switch to low-power standby mode."],
+            [b"BUFFER FULL",          "BUFFER FULL: ELM327 reports that RS232 buffer is filling at a faster rate than transmission. Increase baud speed."],
+            [b"BUS BUSY",             "BUS BUSY: ELM327 reports too much activity on BUS. Check wiring."],
+            [b"BUS ERROR",            "BUS ERROR: ELM327 reports a BUS error. This might be normal when starting CAN listening."],
+            [b"CAN ERROR",            "CAN ERROR: ELM327 reports a CAN system ERROR. CAN has difficulty initializing, sending or receiving."],
+            [b"<DATA ERROR",          "<DATA ERROR: ELM327 reports an error in the line number following."],
+            [b"DATA ERROR",           "DATA ERROR: ELM327 reports an error response from vehicule, data lost."],
+            [b"FB ERROR",             "EFB ERROR: ELM327 reports a feedBack(FB) error affecting signal. Check cable."],
+            [b"LP ALERT",             "LP ALERT: ELM327 is about to switch to the Low Power (standby) mode within 2 seconds."],
+            [b"LV RESET",             "LV RESET: ELM327 performed a low-voltage reset."],
+            [b"NO DATA",              "NO DATA: ELM327 returns no data, either because answer is empty or not understood or not supported."],
+            [b"<RX ERROR",            "<RX ERROR: ELM327 reports an error in the received CAN data. Check connection parameters."],
+            [b"STOPPED",              "STOPPED: ELM327 reports that OBD operation was interrupted by a received RS232 character, or by a low level on the RTS pin."],
+            [b"UNABLE TO CONNECT",    "UNABLE TO CONNECT: ELM327 tried all available protocols, and could not detect a compatible one."],
+            [b"ERR",                  "ERR: ELM327 reports an error number following."]
+            ]
 
 
     def __init__(self, portname, baudrate, protocol, timeout,
@@ -118,7 +136,6 @@ class ELM327:
         self.__port     = None
         self.__protocol = UnknownProtocol([])
         self.timeout = timeout
-
 
         # ------------- open port -------------
         try:
@@ -283,7 +300,7 @@ class ELM327:
     def set_baudrate(self, baud):
         if baud is None:
             # when connecting to pseudo terminal, don't bother with auto baud
-            if self.port_name().startswith("/dev/pts"):
+            if self.get_port_name().startswith("/dev/pts"):
                 logger.debug("Detected pseudo terminal, skipping baudrate setup")
                 return True
             else:
@@ -358,29 +375,36 @@ class ELM327:
         logger.error(str(msg))
 
 
-    def port_name(self):
+    def get_port_name(self):
         if self.__port is not None:
             return self.__port.portstr
         else:
             return ""
 
 
-    def status(self):
-        return self.__status
+    def get_port_baudrate(self):
+        if self.__port is not None:
+            return self.__port.baudrate
+        else:
+            return ""
 
 
-    def ecus(self):
-        return self.__protocol.ecu_map.values()
-
-
-    def protocol_name(self):
+    def get_protocol_name(self):
         return self.__protocol.ELM_NAME
 
 
-    def protocol_id(self):
+    def get_protocol_id(self):
         return self.__protocol.ELM_ID
 
 
+    def get_ecus(self):
+        return self.__protocol.ecu_map.values()
+
+
+    def status(self):
+        return self.__status
+    
+    
     def close(self):
         """
             Resets the device, and sets all
@@ -484,7 +508,7 @@ class ELM327:
 
             # if nothing was recieved
             if not data:
-                logger.warning("Failed to read port")
+                logger.warning("Failed to read port: empty data.")
                 break
 
             buffer.extend(data)
@@ -492,6 +516,12 @@ class ELM327:
             # end on chevron (ELM prompt character)
             if self.ELM_PROMPT in buffer:
                 break
+         
+        #Check errors received by ELM327 and write debug
+        for iError in self._ERROR_MESSAGES:
+            if iError[0] in buffer:
+                logger.debug(iError[1])
+                break   
 
         # log, and remove the "bytearray(   ...   )" part
         logger.debug("read: " + repr(buffer)[10:-1])
