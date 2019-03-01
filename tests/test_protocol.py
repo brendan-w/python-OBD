@@ -13,7 +13,8 @@ def test_ECU():
         assert (ECU.ALL & ecu) > 0, "ECU: %d is not included in ECU.ALL" % ecu
 
         for other_ecu in tested:
-            assert (ecu & other_ecu) == 0, "ECU: %d has a conflicting bit with another ECU constant" %ecu
+            assert (
+                ecu & other_ecu) == 0, "ECU: %d has a conflicting bit with another ECU constant" % ecu
 
         tested.append(ecu)
 
@@ -22,13 +23,13 @@ def test_frame():
     # constructor
     frame = Frame("asdf")
     assert frame.raw == "asdf", "Frame failed to accept raw data as __init__ argument"
-    assert frame.priority  == None
+    assert frame.priority == None
     assert frame.addr_mode == None
-    assert frame.rx_id     == None
-    assert frame.tx_id     == None
-    assert frame.type      == None
+    assert frame.rx_id == None
+    assert frame.tx_id == None
+    assert frame.type == None
     assert frame.seq_index == 0
-    assert frame.data_len  == None
+    assert frame.data_len == None
 
 
 def test_message():
@@ -44,9 +45,10 @@ def test_message():
 
     assert message.frames == frames
     assert message.ecu == ECU.UNKNOWN
-    assert message.tx_id == 42 # this is dynamically read from the first frame
+    assert message.tx_id == 42  # this is dynamically read from the first frame
 
-    assert Message([]).tx_id == None # if no frames are given, then we can't report a tx_id
+    # if no frames are given, then we can't report a tx_id
+    assert Message([]).tx_id == None
 
 
 def test_message_hex():
@@ -64,7 +66,8 @@ def test_populate_ecu_map():
     # parse from messages
 
     # use primary ECU when multiple are present
-    p = SAE_J1850_PWM(["48 6B 10 41 00 BE 1F B8 11 AA", "48 6B 12 41 00 BE 1F B8 11 AA"])
+    p = SAE_J1850_PWM(["48 6B 10 41 00 BE 1F B8 11 AA",
+                       "48 6B 12 41 00 BE 1F B8 11 AA"])
     assert p.ecu_map[0x10] == ECU.ENGINE
 
     # use lone responses regardless
@@ -72,7 +75,8 @@ def test_populate_ecu_map():
     assert p.ecu_map[0x12] == ECU.ENGINE
 
     # if primary ECU is not listed, use response with most PIDs supported
-    p = SAE_J1850_PWM(["48 6B 12 41 00 BE 1F B8 11 AA", "48 6B 14 41 00 00 00 B8 11 AA"])
+    p = SAE_J1850_PWM(["48 6B 12 41 00 BE 1F B8 11 AA",
+                       "48 6B 14 41 00 00 00 B8 11 AA"])
     assert p.ecu_map[0x12] == ECU.ENGINE
 
     # if no messages were received, then the map is empty

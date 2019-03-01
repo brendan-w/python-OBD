@@ -10,6 +10,7 @@ from obd import commands, Unit
 #       ELM's internal timeout.
 STANDARD_WAIT_TIME = 0.3
 
+
 @pytest.fixture(scope="module")
 def obd(request):
     """provides an OBD connection object for obdsim"""
@@ -65,7 +66,7 @@ def test_async_query(asynchronous):
 
     # make sure we got data
     assert(len(rs) > 0)
-    assert(all([ good_rpm_response(r) for r in rs ]))
+    assert(all([good_rpm_response(r) for r in rs]))
 
 
 @pytest.mark.skipif(not pytest.config.getoption("--port"),
@@ -81,7 +82,7 @@ def test_async_callback(asynchronous):
 
     # make sure we got data
     assert(len(rs) > 0)
-    assert(all([ good_rpm_response(r) for r in rs ]))
+    assert(all([good_rpm_response(r) for r in rs]))
 
 
 @pytest.mark.skipif(not pytest.config.getoption("--port"),
@@ -127,11 +128,11 @@ def test_async_unwatch(asynchronous):
 
     # the watched commands
     assert(len(watched_rs) > 0)
-    assert(all([ good_rpm_response(r) for r in watched_rs ]))
+    assert(all([good_rpm_response(r) for r in watched_rs]))
 
     # the unwatched commands
     assert(len(unwatched_rs) > 0)
-    assert(all([ r.is_null() for r in unwatched_rs ]))
+    assert(all([r.is_null() for r in unwatched_rs]))
 
 
 @pytest.mark.skipif(not pytest.config.getoption("--port"),
@@ -153,5 +154,5 @@ def test_async_unwatch_callback(asynchronous):
     asynchronous.stop()
     asynchronous.unwatch_all()
 
-    assert(all([ good_rpm_response(r) for r in a_rs + b_rs ]))
+    assert(all([good_rpm_response(r) for r in a_rs + b_rs]))
     assert(len(a_rs) > len(b_rs))

@@ -8,7 +8,7 @@ def test_list_integrity():
         for pid, cmd in enumerate(cmds):
 
             if cmd is None:
-                continue # this command is reserved
+                continue  # this command is reserved
 
             assert cmd.command != b"",         "The Command's command string must not be null"
 
@@ -26,8 +26,10 @@ def test_list_integrity():
             assert cmd.name.isupper(),              "Command names must be upper case"
             assert ' ' not in cmd.name,             "No spaces allowed in command names"
             assert cmd.desc != "",                  "Command description must not be null"
-            assert (mode >= 1) and (mode <= 9),     "Mode must be in the range [1, 9] (decimal)"
-            assert (pid >= 0) and (pid <= 196),     "PID must be in the range [0, 196] (decimal)"
+            assert (mode >= 1) and (
+                mode <= 9),     "Mode must be in the range [1, 9] (decimal)"
+            assert (pid >= 0) and (
+                pid <= 196),     "PID must be in the range [0, 196] (decimal)"
             assert cmd.bytes >= 0,                  "Number of return bytes must be >= 0"
             assert hasattr(cmd.decode, '__call__'), "Decode is not callable"
 
@@ -40,9 +42,10 @@ def test_unique_names():
         for cmd in cmds:
 
             if cmd is None:
-                continue # this command is reserved
+                continue  # this command is reserved
 
-            assert not names.__contains__(cmd.name), "Two commands share the same name: %s" % cmd.name
+            assert not names.__contains__(
+                cmd.name), "Two commands share the same name: %s" % cmd.name
             names[cmd.name] = True
 
 
@@ -52,7 +55,7 @@ def test_getitem():
         for cmd in cmds:
 
             if cmd is None:
-                continue # this command is reserved
+                continue  # this command is reserved
 
             # by [mode][pid]
             if (cmd.pid is None) and (len(cmds) == 1):
@@ -60,10 +63,12 @@ def test_getitem():
                 # value of None, but can still be accessed by PID 0
                 assert cmd == obd.commands[cmd.mode][0], "lone command in mode %d could not be accessed through __getitem__" % mode
             else:
-                assert cmd == obd.commands[cmd.mode][cmd.pid], "mode %d, PID %d could not be accessed through __getitem__" % (mode, pid)
+                assert cmd == obd.commands[cmd.mode][cmd.pid], "mode %d, PID %d could not be accessed through __getitem__" % (
+                    mode, pid)
 
             # by [name]
-            assert cmd == obd.commands[cmd.name], "command name %s could not be accessed through __getitem__" % (cmd.name)
+            assert cmd == obd.commands[cmd.name], "command name %s could not be accessed through __getitem__" % (
+                cmd.name)
 
 
 def test_contains():
@@ -72,7 +77,7 @@ def test_contains():
         for cmd in cmds:
 
             if cmd is None:
-                continue # this command is reserved
+                continue  # this command is reserved
 
             # by (command)
             assert obd.commands.has_command(cmd)
@@ -105,7 +110,7 @@ def test_pid_getters():
         for cmd in mode:
 
             if cmd is None:
-                continue # this command is reserved
+                continue  # this command is reserved
 
             if cmd.decode == pid:
                 assert cmd in pid_getters

@@ -14,10 +14,10 @@ LEGACY_PROTOCOLS = [
 
 
 def check_message(m, n_frames, tx_id, data):
-        """ generic test for correct message values """
-        assert len(m.frames) == n_frames
-        assert m.tx_id       == tx_id
-        assert m.data        == bytearray(data)
+    """ generic test for correct message values """
+    assert len(m.frames) == n_frames
+    assert m.tx_id == tx_id
+    assert m.data == bytearray(data)
 
 
 def test_single_frame():
@@ -32,7 +32,8 @@ def test_single_frame():
         # maximum valid length
         r = p(["48 6B 10 41 00 00 01 02 03 04 FF"])
         assert len(r) == 1
-        check_message(r[0], 1, 0x10, [0x41, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04])
+        check_message(r[0], 1, 0x10, [0x41, 0x00,
+                                      0x00, 0x01, 0x02, 0x03, 0x04])
 
         # to short
         r = p(["48 6B 10 41 FF"])
@@ -61,7 +62,6 @@ def test_hex_straining():
         assert r[0].ecu == ECU.UNKNOWN
         assert len(r[0].frames) == 1
 
-
         # multiple non-hex message
         r = p(["12.8 Volts", "NO DATA"])
         assert len(r) == 2
@@ -81,14 +81,12 @@ def test_hex_straining():
         # second message: invalid, non-parsable non-hex
         assert r[1].ecu == ECU.UNKNOWN
         assert len(r[1].frames) == 1
-        assert len(r[1].data) == 0 # no data
-
+        assert len(r[1].data) == 0  # no data
 
 
 def test_multi_ecu():
     for protocol in LEGACY_PROTOCOLS:
         p = protocol([])
-
 
         test_case = [
             "48 6B 13 41 00 00 01 02 03 FF",
@@ -106,7 +104,6 @@ def test_multi_ecu():
         check_message(r[0], 1, 0x10, correct_data)
         check_message(r[1], 1, 0x11, correct_data)
         check_message(r[2], 1, 0x13, correct_data)
-
 
 
 def test_multi_line():
@@ -133,11 +130,10 @@ def test_multi_line():
 
         # test a few out-of-order cases
         for n in range(4):
-            random.shuffle(test_case) # mix up the frame strings
+            random.shuffle(test_case)  # mix up the frame strings
             r = p(test_case)
             assert len(r) == 1
             check_message(r[0], len(test_case), 0x10, correct_data)
-
 
 
 def test_multi_line_missing_frames():
@@ -148,7 +144,6 @@ def test_multi_line_missing_frames():
 
     for protocol in LEGACY_PROTOCOLS:
         p = protocol([])
-
 
         test_case = [
             "48 6B 10 49 02 01 00 01 02 03 FF",
@@ -173,13 +168,13 @@ def test_multi_line_mode_03():
     for protocol in LEGACY_PROTOCOLS:
         p = protocol([])
 
-
         test_case = [
             "48 6B 10 43 00 01 02 03 04 05 FF",
             "48 6B 10 43 06 07 08 09 0A 0B FF",
         ]
 
-        correct_data = [0x43, 0x00] + list(range(12)) # data is stitched in order recieved
+        # data is stitched in order recieved
+        correct_data = [0x43, 0x00] + list(range(12))
         #                     ^^^^ this is an arbitrary value in the source code
 
         r = p(test_case)

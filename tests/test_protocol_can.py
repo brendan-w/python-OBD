@@ -19,15 +19,13 @@ CAN_29_PROTOCOLS = [
 def check_message(m, num_frames, tx_id, data):
     """ generic test for correct message values """
     assert len(m.frames) == num_frames
-    assert m.tx_id       == tx_id
-    assert m.data        == bytearray(data)
-
+    assert m.tx_id == tx_id
+    assert m.data == bytearray(data)
 
 
 def test_single_frame():
     for protocol in CAN_11_PROTOCOLS:
         p = protocol([])
-
 
         r = p(["7E8 06 41 00 00 01 02 03"])
         assert len(r) == 1
@@ -74,7 +72,6 @@ def test_hex_straining():
         assert r[0].ecu == ECU.UNKNOWN
         assert len(r[0].frames) == 1
 
-
         # multiple non-hex message
         r = p(["12.8 Volts", "NO DATA"])
         assert len(r) == 2
@@ -94,14 +91,12 @@ def test_hex_straining():
         # second message: invalid, non-parsable non-hex
         assert r[1].ecu == ECU.UNKNOWN
         assert len(r[1].frames) == 1
-        assert len(r[1].data) == 0 # no data
-
+        assert len(r[1].data) == 0  # no data
 
 
 def test_multi_ecu():
     for protocol in CAN_11_PROTOCOLS:
         p = protocol([])
-
 
         test_case = [
             "7E8 06 41 00 00 01 02 03",
@@ -119,7 +114,6 @@ def test_multi_ecu():
         check_message(r[0], 1, 0x0, correct_data)
         check_message(r[1], 1, 0x2, correct_data)
         check_message(r[2], 1, 0x3, correct_data)
-
 
 
 def test_multi_line():
@@ -147,11 +141,10 @@ def test_multi_line():
 
         # test a few out-of-order cases
         for n in range(4):
-            random.shuffle(test_case) # mix up the frame strings
+            random.shuffle(test_case)  # mix up the frame strings
             r = p(test_case)
             assert len(r) == 1
             check_message(r[0], len(test_case), 0x0, correct_data)
-
 
 
 def test_multi_line_missing_frames():
@@ -176,7 +169,6 @@ def test_multi_line_missing_frames():
 
             r = p(sub_test)
             assert len(r) == 0
-
 
 
 def test_multi_line_mode_03():
