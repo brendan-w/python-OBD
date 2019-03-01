@@ -49,27 +49,27 @@ class Async(OBD):
                  timeout=0.1, check_voltage=True, delay_cmds=0.25):
         super(Async, self).__init__(portstr, baudrate, protocol, fast,
                                     timeout, check_voltage)
-        self.__commands    = {} # key = OBDCommand, value = Response
-        self.__callbacks   = {} # key = OBDCommand, value = list of Functions
-        self.__thread      = None
-        self.__running     = False
-        self.__was_running = False # used with __enter__() and __exit__()
-        self.__delay_cmds  = delay_cmds
-
+        self.__commands = {}  # key = OBDCommand, value = Response
+        self.__callbacks = {}  # key = OBDCommand, value = list of Functions
+        self.__thread = None
+        self.__running = False
+        self.__was_running = False  # used with __enter__() and __exit__()
+        self.__delay_cmds = delay_cmds
 
     @property
     def running(self):
         return self.__running
 
-
     def start(self):
         """ Starts the async update loop """
         if not self.is_connected():
-            logger.info("Async thread not started because no connection was made")
+            logger.info(
+                "Async thread not started because no connection was made")
             return
 
         if len(self.__commands) == 0:
-            logger.info("Async thread not started because no commands were registered")
+            logger.info(
+                "Async thread not started because no commands were registered")
             return
 
         if self.__thread is None:
@@ -79,7 +79,6 @@ class Async(OBD):
             self.__thread.daemon = True
             self.__thread.start()
 
-
     def stop(self):
         """ Stops the async update loop """
         if self.__thread is not None:
@@ -88,7 +87,6 @@ class Async(OBD):
             self.__thread.join()
             self.__thread = None
             logger.info("Async thread stopped")
-
 
     def paused(self):
         """
@@ -100,7 +98,6 @@ class Async(OBD):
         """
         return self
 
-
     def __enter__(self):
         """
             pauses the async loop,
@@ -110,7 +107,6 @@ class Async(OBD):
         self.stop()
         return self.__was_running
 
-
     def __exit__(self, exc_type, exc_value, traceback):
         """
             resumes the update loop if it was running
@@ -119,14 +115,12 @@ class Async(OBD):
         if not self.__running and self.__was_running:
             self.start()
 
-        return False # don't suppress any exceptions
-
+        return False  # don't suppress any exceptions
 
     def close(self):
         """ Closes the connection """
         self.stop()
         super(Async, self).close()
-
 
     def watch(self, c, callback=None, force=False):
         """
@@ -147,14 +141,13 @@ class Async(OBD):
             # new command being watched, store the command
             if c not in self.__commands:
                 logger.info("Watching command: %s" % str(c))
-                self.__commands[c] = OBDResponse() # give it an initial value
-                self.__callbacks[c] = [] # create an empty list
+                self.__commands[c] = OBDResponse()  # give it an initial value
+                self.__callbacks[c] = []  # create an empty list
 
             # if a callback was given, push it
             if hasattr(callback, "__call__") and (callback not in self.__callbacks[c]):
                 logger.info("subscribing callback for command: %s" % str(c))
                 self.__callbacks[c].append(callback)
-
 
     def unwatch(self, c, callback=None):
         """
@@ -182,18 +175,17 @@ class Async(OBD):
                     self.__callbacks.pop(c, None)
                     self.__commands.pop(c, None)
 
-
     def unwatch_all(self):
         """ Unsubscribes all commands and callbacks from being updated """
 
         # the dict shouldn't be changed while the daemon thread is iterating
         if self.__running:
-            logger.warning("Can't unwatch_all() while running, please use stop()")
+            logger.warning(
+                "Can't unwatch_all() while running, please use stop()")
         else:
             logger.info("Unwatching all")
-            self.__commands  = {}
+            self.__commands = {}
             self.__callbacks = {}
-
 
     def query(self, c):
         """
@@ -206,7 +198,6 @@ class Async(OBD):
         else:
             return OBDResponse()
 
-
     def run(self):
         """ Daemon thread """
 
@@ -217,7 +208,8 @@ class Async(OBD):
                 # loop over the requested commands, send, and collect the response
                 for c in self.__commands:
                     if not self.is_connected():
-                        logger.info("Async thread terminated because device disconnected")
+                        logger.info(
+                            "Async thread terminated because device disconnected")
                         self.__running = False
                         self.__thread = None
                         return
@@ -234,4 +226,4 @@ class Async(OBD):
                 time.sleep(self.__delay_cmds)
 
             else:
-                time.sleep(0.25) # idle
+                time.sleep(0.25)  # idle

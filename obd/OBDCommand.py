@@ -49,14 +49,16 @@ class OBDCommand():
                  ecu=ECU.ALL,
                  fast=False,
                  header=ECU_HEADER.ENGINE):
-        self.name      = name        # human readable name (also used as key in commands dict)
-        self.desc      = desc        # human readable description
-        self.command   = command     # command string
-        self.bytes     = _bytes      # number of bytes expected in return
-        self.decode    = decoder     # decoding function
-        self.ecu       = ecu         # ECU ID from which this command expects messages from
-        self.fast      = fast        # can an extra digit be added to the end of the command? (to make the ELM return early)
-        self.header    = header      # ECU header used for the queries
+        # human readable name (also used as key in commands dict)
+        self.name = name
+        self.desc = desc        # human readable description
+        self.command = command     # command string
+        self.bytes = _bytes      # number of bytes expected in return
+        self.decode = decoder     # decoding function
+        self.ecu = ecu         # ECU ID from which this command expects messages from
+        # can an extra digit be added to the end of the command? (to make the ELM return early)
+        self.fast = fast
+        self.header = header      # ECU header used for the queries
 
     def clone(self):
         return OBDCommand(self.name,
@@ -83,11 +85,10 @@ class OBDCommand():
         else:
             return None
 
-
     def __call__(self, messages):
 
         # filter for applicable messages (from the right ECU(s))
-        for_us = lambda m: (self.ecu & m.ecu) > 0
+        def for_us(m): return (self.ecu & m.ecu) > 0
         messages = list(filter(for_us, messages))
 
         # guarantee data size for the decoder
@@ -104,19 +105,19 @@ class OBDCommand():
 
         return r
 
-
     def __constrain_message_data(self, message):
         """ pads or chops the data field to the size specified by this command """
         if self.bytes > 0:
             if len(message.data) > self.bytes:
                 # chop off the right side
                 message.data = message.data[:self.bytes]
-                logger.debug("Message was longer than expected. Trimmed message: " + repr(message.data))
+                logger.debug(
+                    "Message was longer than expected. Trimmed message: " + repr(message.data))
             elif len(message.data) < self.bytes:
                 # pad the right with zeros
                 message.data += (b'\x00' * (self.bytes - len(message.data)))
-                logger.debug("Message was shorter than expected. Padded message: " + repr(message.data))
-
+                logger.debug(
+                    "Message was shorter than expected. Padded message: " + repr(message.data))
 
     def __str__(self):
         return "%s: %s" % (self.command, self.desc)

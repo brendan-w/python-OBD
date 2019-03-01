@@ -40,7 +40,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
 class OBDStatus:
     """ Values for the connection status flags """
 
@@ -48,8 +47,6 @@ class OBDStatus:
     ELM_CONNECTED = "ELM Connected"
     OBD_CONNECTED = "OBD Connected"
     CAR_CONNECTED = "Car Connected"
-
-
 
 
 class bitarray:
@@ -65,7 +62,7 @@ class bitarray:
         self.bits = ""
         for b in _bytearray:
             v = bin(b)[2:]
-            self.bits += ("0" * (8 - len(v))) + v # pad it with zeros
+            self.bits += ("0" * (8 - len(v))) + v  # pad it with zeros
 
     def __getitem__(self, key):
         if isinstance(key, int):
@@ -76,7 +73,7 @@ class bitarray:
         elif isinstance(key, slice):
             bits = self.bits[key]
             if bits:
-                return [ b == "1" for b in bits ]
+                return [b == "1" for b in bits]
             else:
                 return []
 
@@ -100,7 +97,7 @@ class bitarray:
         return self.bits
 
     def __iter__(self):
-        return [ b == "1" for b in self.bits ].__iter__()
+        return [b == "1" for b in self.bits].__iter__()
 
 
 def bytes_to_int(bs):
@@ -112,6 +109,7 @@ def bytes_to_int(bs):
         p += 8
     return v
 
+
 def bytes_to_hex(bs):
     h = ""
     for b in bs:
@@ -119,14 +117,17 @@ def bytes_to_hex(bs):
         h += ("0" * (2 - len(bh))) + bh
     return h
 
+
 def twos_comp(val, num_bits):
     """compute the 2's compliment of int value val"""
-    if( (val&(1<<(num_bits-1))) != 0 ):
-        val = val - (1<<num_bits)
+    if((val & (1 << (num_bits-1))) != 0):
+        val = val - (1 << num_bits)
     return val
+
 
 def isHex(_hex):
     return all([c in string.hexdigits for c in _hex])
+
 
 def contiguous(l, start, end):
     """ checks that a list of integers are consequtive """
@@ -149,13 +150,13 @@ def try_port(portStr):
     """returns boolean for port availability"""
     try:
         s = serial.Serial(portStr)
-        s.close() # explicit close 'cause of delayed GC in java
+        s.close()  # explicit close 'cause of delayed GC in java
         return True
 
     except serial.SerialException:
         pass
     except OSError as e:
-        if e.errno != errno.ENOENT: # permit "no such file or directory" errors
+        if e.errno != errno.ENOENT:  # permit "no such file or directory" errors
             raise e
 
     return False
@@ -179,7 +180,8 @@ def scan_serial():
             '/dev/tty.Bluetooth-Incoming-Port',
             '/dev/tty.Bluetooth-Modem'
         ]
-        possible_ports += [port for port in glob.glob('/dev/tty.*') if port not in exclude]
+        possible_ports += [port for port in glob.glob(
+            '/dev/tty.*') if port not in exclude]
 
     # possible_ports += glob.glob('/dev/pts/[0-9]*') # for obdsim
 

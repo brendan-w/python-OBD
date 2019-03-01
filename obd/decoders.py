@@ -51,7 +51,6 @@ def <name>(<list_of_messages>):
 '''
 
 
-
 # drop all messages, return None
 def drop(messages):
     return None
@@ -68,6 +67,8 @@ def pid(messages):
     return bitarray(d)
 
 # returns the raw strings from the ELM
+
+
 def raw_string(messages):
     return "\n".join([m.raw() for m in messages])
 
@@ -78,12 +79,14 @@ tables (used mainly for Mode 06). The uas() decoder is a wrapper for any
 Unit/Scaling in that table, simply to avoid redundant code.
 """
 
+
 def uas(id):
     """ get the corresponding decoder for this UAS ID """
     return functools.partial(decode_uas, id=id)
 
+
 def decode_uas(messages, id):
-    d = messages[0].data[2:] # chop off mode and PID bytes
+    d = messages[0].data[2:]  # chop off mode and PID bytes
     return UAS_IDS[id](d)
 
 
@@ -93,6 +96,8 @@ Return pint Quantities
 """
 
 # 0 to 100 %
+
+
 def percent(messages):
     d = messages[0].data[2:]
     v = d[0]
@@ -100,6 +105,8 @@ def percent(messages):
     return v * Unit.percent
 
 # -100 to 100 %
+
+
 def percent_centered(messages):
     d = messages[0].data[2:]
     v = d[0]
@@ -107,13 +114,17 @@ def percent_centered(messages):
     return v * Unit.percent
 
 # -40 to 215 C
+
+
 def temp(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d)
     v = v - 40
-    return Unit.Quantity(v, Unit.celsius) # non-multiplicative unit
+    return Unit.Quantity(v, Unit.celsius)  # non-multiplicative unit
 
 # -128 to 128 mA
+
+
 def current_centered(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d[2:4])
@@ -121,12 +132,16 @@ def current_centered(messages):
     return v * Unit.milliampere
 
 # 0 to 1.275 volts
+
+
 def sensor_voltage(messages):
     d = messages[0].data[2:]
     v = d[0] / 200.0
     return v * Unit.volt
 
 # 0 to 8 volts
+
+
 def sensor_voltage_big(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d[2:4])
@@ -134,6 +149,8 @@ def sensor_voltage_big(messages):
     return v * Unit.volt
 
 # 0 to 765 kPa
+
+
 def fuel_pressure(messages):
     d = messages[0].data[2:]
     v = d[0]
@@ -141,12 +158,16 @@ def fuel_pressure(messages):
     return v * Unit.kilopascal
 
 # 0 to 255 kPa
+
+
 def pressure(messages):
     d = messages[0].data[2:]
     v = d[0]
     return v * Unit.kilopascal
 
 # -8192 to 8192 Pa
+
+
 def evap_pressure(messages):
     # decode the twos complement
     d = messages[0].data[2:]
@@ -156,6 +177,8 @@ def evap_pressure(messages):
     return v * Unit.pascal
 
 # 0 to 327.675 kPa
+
+
 def abs_evap_pressure(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d)
@@ -163,6 +186,8 @@ def abs_evap_pressure(messages):
     return v * Unit.kilopascal
 
 # -32767 to 32768 Pa
+
+
 def evap_pressure_alt(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d)
@@ -170,6 +195,8 @@ def evap_pressure_alt(messages):
     return v * Unit.pascal
 
 # -64 to 63.5 degrees
+
+
 def timing_advance(messages):
     d = messages[0].data[2:]
     v = d[0]
@@ -177,6 +204,8 @@ def timing_advance(messages):
     return v * Unit.degree
 
 # -210 to 301 degrees
+
+
 def inject_timing(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d)
@@ -184,6 +213,8 @@ def inject_timing(messages):
     return v * Unit.degree
 
 # 0 to 2550 grams/sec
+
+
 def max_maf(messages):
     d = messages[0].data[2:]
     v = d[0]
@@ -191,6 +222,8 @@ def max_maf(messages):
     return v * Unit.gps
 
 # 0 to 3212 Liters/hour
+
+
 def fuel_rate(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d)
@@ -198,37 +231,45 @@ def fuel_rate(messages):
     return v * Unit.liters_per_hour
 
 # special bit encoding for PID 13
+
+
 def o2_sensors(messages):
     d = messages[0].data[2:]
     bits = bitarray(d)
     return (
-        (), # bank 0 is invalid
-        tuple(bits[:4]), # bank 1
-        tuple(bits[4:]), # bank 2
+        (),  # bank 0 is invalid
+        tuple(bits[:4]),  # bank 1
+        tuple(bits[4:]),  # bank 2
     )
+
 
 def aux_input_status(messages):
     d = messages[0].data[2:]
-    return ((d[0] >> 7) & 1) == 1 # first bit indicate PTO status
+    return ((d[0] >> 7) & 1) == 1  # first bit indicate PTO status
 
 # special bit encoding for PID 1D
+
+
 def o2_sensors_alt(messages):
     d = messages[0].data[2:]
     bits = bitarray(d)
     return (
-        (), # bank 0 is invalid
-        tuple(bits[:2]), # bank 1
-        tuple(bits[2:4]), # bank 2
-        tuple(bits[4:6]), # bank 3
-        tuple(bits[6:]), # bank 4
+        (),  # bank 0 is invalid
+        tuple(bits[:2]),  # bank 1
+        tuple(bits[2:4]),  # bank 2
+        tuple(bits[4:6]),  # bank 3
+        tuple(bits[6:]),  # bank 4
     )
 
 # 0 to 25700 %
+
+
 def absolute_load(messages):
     d = messages[0].data[2:]
     v = bytes_to_int(d)
     v *= 100.0 / 255.0
     return v * Unit.percent
+
 
 def elm_voltage(messages):
     # doesn't register as a normal OBD response,
@@ -249,7 +290,6 @@ def elm_voltage(messages):
 Special decoders
 Return objects, lists, etc
 '''
-
 
 
 def status(messages):
@@ -278,20 +318,21 @@ def status(messages):
         output.__dict__[name] = t
 
     # different tests for different ignition types
-    if bits[12]: # compression
-        for i, name in enumerate(COMPRESSION_TESTS[::-1]): # reverse to correct for bit vs. indexing order
+    if bits[12]:  # compression
+        # reverse to correct for bit vs. indexing order
+        for i, name in enumerate(COMPRESSION_TESTS[::-1]):
             t = StatusTest(name, bits[(2 * 8) + i],
-                             not bits[(3 * 8) + i])
+                           not bits[(3 * 8) + i])
             output.__dict__[name] = t
 
-    else: # spark
-        for i, name in enumerate(SPARK_TESTS[::-1]): # reverse to correct for bit vs. indexing order
+    else:  # spark
+        # reverse to correct for bit vs. indexing order
+        for i, name in enumerate(SPARK_TESTS[::-1]):
             t = StatusTest(name, bits[(2 * 8) + i],
-                             not bits[(3 * 8) + i])
+                           not bits[(3 * 8) + i])
             output.__dict__[name] = t
 
     return output
-
 
 
 def fuel_status(messages):
@@ -303,7 +344,7 @@ def fuel_status(messages):
 
     if bits[0:8].count(True) == 1:
         if 7 - bits[0:8].index(True) < len(FUEL_STATUS):
-            status_1 = FUEL_STATUS[ 7 - bits[0:8].index(True) ]
+            status_1 = FUEL_STATUS[7 - bits[0:8].index(True)]
         else:
             logger.debug("Invalid response for fuel status (high bits set)")
     else:
@@ -311,7 +352,7 @@ def fuel_status(messages):
 
     if bits[8:16].count(True) == 1:
         if 7 - bits[8:16].index(True) < len(FUEL_STATUS):
-            status_2 = FUEL_STATUS[ 7 - bits[8:16].index(True) ]
+            status_2 = FUEL_STATUS[7 - bits[8:16].index(True)]
         else:
             logger.debug("Invalid response for fuel status (high bits set)")
     else:
@@ -329,7 +370,7 @@ def air_status(messages):
 
     status = None
     if bits.num_set() == 1:
-        status = AIR_STATUS[ 7 - bits[0:8].index(True) ]
+        status = AIR_STATUS[7 - bits[0:8].index(True)]
     else:
         logger.debug("Invalid response for fuel status (multiple/no bits set)")
 
@@ -352,7 +393,7 @@ def obd_compliance(messages):
 
 def fuel_type(messages):
     d = messages[0].data[2:]
-    i = d[0] # todo, support second fuel system
+    i = d[0]  # todo, support second fuel system
 
     v = None
 
@@ -368,7 +409,7 @@ def parse_dtc(_bytes):
     """ converts 2 bytes into a DTC code """
 
     # check validity (also ignores padding that the ELM returns)
-    if (len(_bytes) != 2) or (_bytes == (0,0)):
+    if (len(_bytes) != 2) or (_bytes == (0, 0)):
         return None
 
     # BYTES: (16,      35      )
@@ -378,8 +419,10 @@ def parse_dtc(_bytes):
     #         | / /
     # DTC:    C0123
 
-    dtc  = ['P', 'C', 'B', 'U'][ _bytes[0] >> 6 ] # the last 2 bits of the first byte
-    dtc += str( (_bytes[0] >> 4) & 0b0011 ) # the next pair of 2 bits. Mask off the bits we read above
+    # the last 2 bits of the first byte
+    dtc = ['P', 'C', 'B', 'U'][_bytes[0] >> 6]
+    # the next pair of 2 bits. Mask off the bits we read above
+    dtc += str((_bytes[0] >> 4) & 0b0011)
     dtc += bytes_to_hex(_bytes)[1:4]
 
     # pull a description if we have one
@@ -397,14 +440,14 @@ def dtc(messages):
     codes = []
     d = []
     for message in messages:
-        d += message.data[2:] # remove the mode and DTC_count bytes
+        d += message.data[2:]  # remove the mode and DTC_count bytes
 
     # look at data in pairs of bytes
     # looping through ENDING indices to avoid odd (invalid) code lengths
     for n in range(1, len(d), 2):
 
         # parse the code
-        dtc = parse_dtc( (d[n-1], d[n]) )
+        dtc = parse_dtc((d[n-1], d[n]))
 
         if dtc is not None:
             codes.append(dtc)
@@ -418,8 +461,8 @@ def parse_monitor_test(d, mon):
     tid = d[1]
 
     if tid in TEST_IDS:
-        test.name = TEST_IDS[tid][0] # lookup the name from the table
-        test.desc = TEST_IDS[tid][1] # lookup the description from the table
+        test.name = TEST_IDS[tid][0]  # lookup the name from the table
+        test.desc = TEST_IDS[tid][1]  # lookup the description from the table
     else:
         logger.debug("Encountered unknown Test ID")
         test.name = "Unknown"
@@ -434,25 +477,26 @@ def parse_monitor_test(d, mon):
 
     # load the test results
     test.tid = tid
-    test.value = uas(d[3:5]) # convert bytes to actual values
-    test.min   = uas(d[5:7])
-    test.max   = uas(d[7:])
+    test.value = uas(d[3:5])  # convert bytes to actual values
+    test.min = uas(d[5:7])
+    test.max = uas(d[7:])
 
     return test
 
 
 def monitor(messages):
-    d = messages[0].data[1:] # only dispose of the mode byte. Leave the MID
-                             # even though we never use the MID byte, it may
-                             # show up multiple times. Thus, keeping it make
-                             # for easier parsing.
+    d = messages[0].data[1:]  # only dispose of the mode byte. Leave the MID
+    # even though we never use the MID byte, it may
+    # show up multiple times. Thus, keeping it make
+    # for easier parsing.
     mon = Monitor()
 
     # test that we got the right number of bytes
     extra_bytes = len(d) % 9
 
     if extra_bytes != 0:
-        logger.debug("Encountered monitor message with non-multiple of 9 bytes. Truncating...")
+        logger.debug(
+            "Encountered monitor message with non-multiple of 9 bytes. Truncating...")
         d = d[:len(d) - extra_bytes]
 
     # look at data in blocks of 9 bytes (one test result)
