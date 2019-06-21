@@ -8,6 +8,7 @@
 # Copyright 2009 Secons Ltd. (www.obdtester.com)                       #
 # Copyright 2009 Peter J. Creath                                       #
 # Copyright 2016 Brendan Whitfield (brendan-w.com)                     #
+# Copyright 2019 Adaptant Solutions AG                                 #
 #                                                                      #
 ########################################################################
 #                                                                      #
@@ -128,9 +129,11 @@ class OBD(object):
             # loop through PIDs bit-array
             for i, bit in enumerate(response.value):
                 if bit:
-
                     mode = get.mode
-                    pid = get.pid + i + 1
+                    if mode == 9:
+                        pid = get.pid + (i - 7) + 1
+                    else:
+                        pid = get.pid + i + 1
 
                     if commands.has_pid(mode, pid):
                         self.supported_commands.add(commands[mode][pid])

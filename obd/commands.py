@@ -8,6 +8,7 @@
 # Copyright 2009 Secons Ltd. (www.obdtester.com)                       #
 # Copyright 2009 Peter J. Creath                                       #
 # Copyright 2016 Brendan Whitfield (brendan-w.com)                     #
+# Copyright 2019 Adaptant Solutions AG                                 #
 #                                                                      #
 ########################################################################
 #                                                                      #
@@ -279,6 +280,27 @@ __mode7__ = [
     OBDCommand("GET_CURRENT_DTC", "Get DTCs from the current/last driving cycle", b"07", 0, dtc, ECU.ALL, False),
 ]
 
+
+__mode9__ = [
+    #                      name                             description                            cmd     bytes       decoder       ECU        fast
+    OBDCommand("PIDS_9A"                    , "Supported PIDs [01-20]"                            , b"0900",  7, pid,                ECU.ALL,     True),
+    OBDCommand("VIN_MESSAGE_COUNT"          , "VIN Message Count"                                 , b"0901",  3, count,              ECU.ENGINE,  True),
+    OBDCommand("VIN"                        , "Get Vehicle Identification Number"                 , b"0902", 22, encoded_string(17), ECU.ENGINE,  True),
+    OBDCommand("CALIBRATION_ID_MESSAGE_COUNT","Calibration ID message count for PID 04"           , b"0903",  3, count,              ECU.ALL,     True),
+    OBDCommand("CALIBRATION_ID"             , "Calibration ID"                                    , b"0904", 18, encoded_string(16), ECU.ALL,     True),
+    OBDCommand("CVN_MESSAGE_COUNT"          , "CVN Message Count for PID 06"                      , b"0905",  3, count,              ECU.ALL,     True),
+    OBDCommand("CVN"                        , "Calibration Verification Numbers"                  , b"0906", 10, cvn,                ECU.ALL,     True),
+
+#
+# NOTE: The following are untested
+#
+#    OBDCommand("PERF_TRACKING_MESSAGE_COUNT", "Performance tracking message count"                , b"0907",  3, count,              ECU.ALL,     True),
+#    OBDCommand("PERF_TRACKING_SPARK"        , "In-use performance tracking (spark ignition)"      , b"0908",  4, raw_string,         ECU.ALL,     True),
+#    OBDCommand("ECU_NAME_MESSAGE_COUNT"     , "ECU Name Message Count for PID 0A"                 , b"0909",  3, count,              ECU.ALL,     True),
+#    OBDCommand("ECU_NAME"                   , "ECU Name"                                          , b"090a", 20, raw_string,         ECU.ALL,     True),
+#    OBDCommand("PERF_TRACKING_COMPRESSION"  , "In-use performance tracking (compression ignition)", b"090b",  4, raw_string,         ECU.ALL,     True),
+]
+
 __misc__ = [
     OBDCommand("ELM_VERSION", "ELM327 version string", b"ATI", 0, raw_string, ECU.UNKNOWN, False),
     OBDCommand("ELM_VOLTAGE", "Voltage detected by OBD-II adapter", b"ATRV", 0, elm_voltage, ECU.UNKNOWN, False),
@@ -303,6 +325,7 @@ class Commands():
             __mode6__,
             __mode7__,
             [],
+            __mode9__,
         ]
 
         # allow commands to be accessed by name
@@ -350,6 +373,7 @@ class Commands():
         """
         return [
             self.PIDS_A,
+            self.PIDS_9A,
             self.MIDS_A,
             self.GET_DTC,
             self.CLEAR_DTC,
