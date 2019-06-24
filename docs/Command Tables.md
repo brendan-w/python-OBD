@@ -261,3 +261,25 @@ The return value will be encoded in the same structure as the Mode 03 `GET_DTC` 
 | N/A | GET_CURRENT_DTC | Get DTCs from the current/last driving cycle | [special](Responses.md#diagnostic-trouble-codes-dtcs) |
 
 <br>
+
+# Mode 09
+
+<span style="color:red">*WARNING: mode 09 is experimental. While it has been tested on a hardware simulator, only a subset of the supported
+commands have (00-06) been tested. Any debug output for this mode, especially for the untested PIDs, would be greatly appreciated.*</span>
+
+|PID | Name                         | Description                                        | Response Value        |
+|----|------------------------------|----------------------------------------------------|-----------------------|
+| 00 | PIDS_9A                      | Supported PIDs [01-20]                             | BitArray              |
+| 01 | VIN_MESSAGE_COUNT            | VIN Message Count                                  | Unit.count            |
+| 02 | VIN                          | Get Vehicle Identification Number                  | string                |
+| 03 | CALIBRATION_ID_MESSAGE_COUNT | Calibration ID message count for PID 04            | Unit.count            |
+| 04 | CALIBRATION_ID               | Calibration ID                                     | string                |
+| 05 | CVN_MESSAGE_COUNT            | CVN Message Count for PID 06                       | Unit.count            |
+| 06 | CVN                          | Calibration Verification Numbers                   | hex string            |
+| 07 | PERF_TRACKING_MESSAGE_COUNT  | Performance tracking message count                 | Unit.count            |
+| 08 | PERF_TRACKING_SPARK          | In-use performance tracking (spark ignition)       | TODO                  |
+| 09 | ECU_NAME_MESSAGE_COUNT       | ECU Name Message Count for PID 0A                  | Unit.count            |
+| 0a | ECU_NAME                     | ECU Name                                           | TODO                  |
+| 0b | PERF_TRACKING_COMPRESSION    | In-use performance tracking (compression ignition) | TODO                  |
+
+<br>

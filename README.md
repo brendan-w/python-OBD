@@ -60,6 +60,7 @@ Here are a handful of the supported commands (sensors). For a full list, see [th
 -   Time since trouble codes cleared
 -   Hybrid battery pack remaining life
 -   Engine fuel rate
+-   Vehicle Identification Number (VIN)
 
 License
 -------
