@@ -146,6 +146,12 @@ class Protocol(object):
         # for example: self.TX_ID_ENGINE : ECU.ENGINE
         self.ecu_map = {}
 
+        if (self.TX_ID_ENGINE is not None):
+            self.ecu_map[self.TX_ID_ENGINE] = ECU.ENGINE
+
+        if (self.TX_ID_TRANSMISSION is not None):
+            self.ecu_map[self.TX_ID_TRANSMISSION] = ECU.TRANSMISSION
+
         # parse the 0100 data into messages
         # NOTE: at this point, their "ecu" property will be UNKNOWN
         messages = self(lines_0100)
