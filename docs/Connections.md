@@ -26,7 +26,7 @@ connection = obd.OBD(ports[0]) # connect to the first port in the list
 
 `baudrate`: The baudrate at which to set the serial connection. This can vary from adapter to adapter. Typical values are: 9600, 38400, 19200, 57600, 115200. The default value (`None`) will auto select a baudrate.
 
-`protocol`: Forces python-OBD to use the given protocol when communicating with the adapter. See [protocol_id()](Connections.md/#protocol_id) for possible values. The default value (`None`) will auto select a protocol.
+`protocol`: Forces python-OBD to use the given protocol when communicating with the adapter. See [protocol_id()](#protocol_id) for possible values. The default value (`None`) will auto select a protocol.
 
 `fast`: Allows commands to be optimized before being sent to the car. Python-OBD currently makes two such optimizations:
 
