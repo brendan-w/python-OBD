@@ -64,6 +64,10 @@ __mode1__ = [
     OBDCommand("INTAKE_PRESSURE"            , "Intake Manifold Pressure"                , b"010B", 3, pressure,              ECU.ENGINE, True),
     OBDCommand("RPM"                        , "Engine RPM"                              , b"010C", 4, uas(0x07),             ECU.ENGINE, True),
     OBDCommand("SPEED"                      , "Vehicle Speed"                           , b"010D", 3, uas(0x09),             ECU.ENGINE, True),
+    
+    OBDCommand("CUSTOM_ABS"                 , "Anti-Lock Breaking System"               , b"213D", 4, count,                 ECU.ENGINE, True),
+    
+    
     OBDCommand("TIMING_ADVANCE"             , "Timing Advance"                          , b"010E", 3, timing_advance,        ECU.ENGINE, True),
     OBDCommand("INTAKE_TEMP"                , "Intake Air Temp"                         , b"010F", 3, temp,                  ECU.ENGINE, True),
     OBDCommand("MAF"                        , "Air Flow Rate (MAF)"                     , b"0110", 4, uas(0x27),             ECU.ENGINE, True),
