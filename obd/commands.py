@@ -64,10 +64,6 @@ __mode1__ = [
     OBDCommand("INTAKE_PRESSURE"            , "Intake Manifold Pressure"                , b"010B", 3, pressure,              ECU.ENGINE, True),
     OBDCommand("RPM"                        , "Engine RPM"                              , b"010C", 4, uas(0x07),             ECU.ENGINE, True),
     OBDCommand("SPEED"                      , "Vehicle Speed"                           , b"010D", 3, uas(0x09),             ECU.ENGINE, True),
-    
-    OBDCommand("CUSTOM_ABS"                 , "Anti-Lock Breaking System"               , b"213D", 4, count,                 ECU.ENGINE, True),
-    
-    
     OBDCommand("TIMING_ADVANCE"             , "Timing Advance"                          , b"010E", 3, timing_advance,        ECU.ENGINE, True),
     OBDCommand("INTAKE_TEMP"                , "Intake Air Temp"                         , b"010F", 3, temp,                  ECU.ENGINE, True),
     OBDCommand("MAF"                        , "Air Flow Rate (MAF)"                     , b"0110", 4, uas(0x27),             ECU.ENGINE, True),
@@ -154,6 +150,7 @@ __mode1__ = [
     OBDCommand("FUEL_INJECT_TIMING"         , "Fuel injection timing"                   , b"015D", 4, inject_timing,         ECU.ENGINE, True),
     OBDCommand("FUEL_RATE"                  , "Engine fuel rate"                        , b"015E", 4, fuel_rate,             ECU.ENGINE, True),
     OBDCommand("EMISSION_REQ"               , "Designed emission requirements"          , b"015F", 3, drop,                  ECU.ENGINE, True),
+    OBDCommand("CUSTOM_ABS"                 , "Anti-Lock Breaking System"               , b"213D", 4, count,                 ECU.ENGINE, True),
 ]
 
 # mode 2 is the same as mode 1, but returns values from when the DTC occured
@@ -231,7 +228,7 @@ __mode6__ = [
     OBDCommand("MONITOR_O2_HEATER_B3S3"      , "O2 Sensor Heater Monitor Bank 3 - Sensor 3"     , b"064B",   0, monitor,               ECU.ALL,     False),
     OBDCommand("MONITOR_O2_HEATER_B3S4"      , "O2 Sensor Heater Monitor Bank 3 - Sensor 4"     , b"064C",   0, monitor,               ECU.ALL,     False),
     OBDCommand("MONITOR_O2_HEATER_B4S1"      , "O2 Sensor Heater Monitor Bank 4 - Sensor 1"     , b"064D",   0, monitor,               ECU.ALL,     False),
-    OBDCommand("MONITOR_O2_HEATER_B4S2"      , "O2 Sensor Heater Monitor Bank 4 - Sensor 2"     , b"064E",   0, monitor,               ECU.ALL,     False),
+    OBDCommand("MONITOR_O2_HEATER_B4S2"      , "O2 Sensor Heater Monitor Bank 4 - SeDTC occurednsor 2"     , b"064E",   0, monitor,               ECU.ALL,     False),
     OBDCommand("MONITOR_O2_HEATER_B4S3"      , "O2 Sensor Heater Monitor Bank 4 - Sensor 3"     , b"064F",   0, monitor,               ECU.ALL,     False),
     OBDCommand("MONITOR_O2_HEATER_B4S4"      , "O2 Sensor Heater Monitor Bank 4 - Sensor 4"     , b"0650",   0, monitor,               ECU.ALL,     False),
 ] + ([None] * 15) + [ # 51 - 5F Reserved
