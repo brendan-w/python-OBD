@@ -150,6 +150,7 @@ __mode1__ = [
     OBDCommand("FUEL_INJECT_TIMING"         , "Fuel injection timing"                   , b"015D", 4, inject_timing,         ECU.ENGINE, True),
     OBDCommand("FUEL_RATE"                  , "Engine fuel rate"                        , b"015E", 4, fuel_rate,             ECU.ENGINE, True),
     OBDCommand("EMISSION_REQ"               , "Designed emission requirements"          , b"015F", 3, drop,                  ECU.ENGINE, True),
+    OBDCommand("CUSTOM_ABS", "Anti-Lock Breaking System" , b"213D", 4, obd.decoders.count, obd.ECU.ENGINE, True),
 ]
 
 # mode 2 is the same as mode 1, but returns values from when the DTC occured
