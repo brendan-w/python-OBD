@@ -62,7 +62,7 @@ __mode1__ = [
     OBDCommand("LONG_FUEL_TRIM_2"           , "Long Term Fuel Trim - Bank 2"            , b"0109", 3, percent_centered,      ECU.ENGINE, True),
     OBDCommand("FUEL_PRESSURE"              , "Fuel Pressure"                           , b"010A", 3, fuel_pressure,         ECU.ENGINE, True),
     OBDCommand("INTAKE_PRESSURE"            , "Intake Manifold Pressure"                , b"010B", 3, pressure,              ECU.ENGINE, True),
-    OBDCommand("RPM"                        , "Engine RPM"                              , b"010C", 4, uas(0x07),             ECU.ENGINE, True),
+    OBDCommand("ABS"                        , "Anti-Lock Breaking System"               , b"010C", 4, count,                 ECU.ENGINE, True),
     OBDCommand("SPEED"                      , "Vehicle Speed"                           , b"010D", 3, uas(0x09),             ECU.ENGINE, True),
     OBDCommand("TIMING_ADVANCE"             , "Timing Advance"                          , b"010E", 3, timing_advance,        ECU.ENGINE, True),
     OBDCommand("INTAKE_TEMP"                , "Intake Air Temp"                         , b"010F", 3, temp,                  ECU.ENGINE, True),
