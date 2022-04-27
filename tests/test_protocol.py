@@ -74,4 +74,4 @@ def test_populate_ecu_map():
 
     # if no messages were received, then the map is empty
     p = SAE_J1850_PWM([])
-    assert len(p.ecu_map) == 0
+    assert p.ecu_map[p.TX_ID_ENGINE] == ECU.ENGINE
