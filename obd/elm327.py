@@ -55,7 +55,9 @@ class ELM327:
             ecus()
     """
 
+    # chevron (ELM prompt character)
     ELM_PROMPT = b'>'
+    # an 'OK' which indicates we are entering low power state
     ELM_LP_ACTIVE = b'OK'
 
     _SUPPORTED_PROTOCOLS = {
@@ -391,7 +393,7 @@ class ELM327:
             logger.info("cannot enter low power when unconnected")
             return None
 
-        lines = self.__send(b"ATLP", delay=1)
+        lines = self.__send(b"ATLP", delay=1, end_marker=self.ELM_LP_ACTIVE)
 
         if 'OK' in lines:
             logger.debug("Successfully entered low power mode")
@@ -466,13 +468,14 @@ class ELM327:
         messages = self.__protocol(lines)
         return messages
 
-    def __send(self, cmd, delay=None):
+    def __send(self, cmd, delay=None, end_marker=ELM_PROMPT):
         """
             unprotected send() function
 
             will __write() the given string, no questions asked.
             returns result of __read() (a list of line strings)
-            after an optional delay.
+            after an optional delay, until the end marker (by
+            default, the prompt) is seen
         """
         self.__write(cmd)
 
@@ -482,13 +485,13 @@ class ELM327:
             time.sleep(delay)
             delayed += delay
 
-        r = self.__read()
+        r = self.__read(end_marker=end_marker)
         while delayed < 1.0 and len(r) <= 0:
             d = 0.1
             logger.debug("no response; wait: %f seconds" % d)
             time.sleep(d)
             delayed += d
-            r = self.__read()
+            r = self.__read(end_marker=end_marker)
         return r
 
     def __write(self, cmd):
@@ -512,11 +515,12 @@ class ELM327:
         else:
             logger.info("cannot perform __write() when unconnected")
 
-    def __read(self):
+    def __read(self, end_marker=ELM_PROMPT):
         """
             "low-level" read function
 
-            accumulates characters until the prompt character is seen
+            accumulates characters until the end marker (by
+            default, the prompt character) is seen
             returns a list of [/r/n] delimited strings
         """
         if not self.__port:
@@ -543,9 +547,8 @@ class ELM327:
 
             buffer.extend(data)
 
-            # end on chevron (ELM prompt character) or an 'OK' which
-            # indicates we are entering low power state
-            if self.ELM_PROMPT in buffer or self.ELM_LP_ACTIVE in buffer:
+            # end on specified end-marker sequence
+            if end_marker in buffer:
                 break
 
         # log, and remove the "bytearray(   ...   )" part
