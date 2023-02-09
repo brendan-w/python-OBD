@@ -1,0 +1,87 @@
+2019-03
+Contributor(s): 
+Alistair Francis
+    Merge pull request #141 from alistair23/kamichal-pep8PEP8 Fixes
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2019-02
+Contributor(s): 
+Michał Kaczmarczyk
+    obd: Fix incorrect whitespace according to PEP8 rulesSigned-off-by: Alistair Francis <alistair@alistair23.me>
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2016-08
+Contributor(s): 
+Brendan Whitfield
+    added utf-8 coding marks so I can use unicode in my comments
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2016-07
+Contributor(s): 
+Brendan Whitfield
+    Merge branch 'devel'
+    reimplemented status, wrote test
+    upcase TID names, lookup tests by string name
+    wrote basic tests for monitor decoder
+    implemented __str__ for monitors
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2016-06
+Contributor(s): 
+Brendan Whitfield
+    added TID table
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2016-04
+Contributor(s): 
+Brendan Whitfield
+    Merge branch 'devel'
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2016-01
+Contributor(s): 
+Brendan Whitfield
+    updated copyright
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2015-06
+Contributor(s): 
+Brendan Whitfield
+    moved response related objects to OBDResponse.py
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2015-03
+Contributor(s): 
+Brendan Whitfield
+    got rid of the tabs
+    Merge branch 'master' into dtc
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2015-02
+Contributor(s): 
+Brendan Whitfield
+    updated GPL notice, added Peter Creath
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+2014-10
+Contributor(s): 
+Brendan Whitfield
+    missed one, updated GPL header in codes.py
+    fixed bit decoding error for small numbers
+    added missing commas in code list
+    finished status decoding
+    wrote more consise DTC decoders
+    still reworking the sensors/commands
+    moved sensor response parsers to different file
+- - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
