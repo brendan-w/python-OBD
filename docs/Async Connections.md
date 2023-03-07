@@ -32,7 +32,7 @@ connection = obd.Async()
 
 # a callback that prints every new value to the console
 def new_rpm(r):
-    print r.value
+    print (r.value)
 
 connection.watch(obd.commands.RPM, callback=new_rpm)
 connection.start()
