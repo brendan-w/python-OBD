@@ -46,11 +46,20 @@ from .OBDResponse import OBDResponse
 from .protocols import ECU
 from .utils import scan_serial, OBDStatus
 from .UnitsAndScaling import Unit
-
+import os
 import logging
 
+def getenv(key:str, default=0): return type(default)(os.getenv(key, default))
+
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.WARNING)
+DEBUG = getenv("DEBUG", 0)
+if DEBUG == 1:
+    logger.setLevel(logging.INFO)
+elif DEBUG == 2:
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.WARNING)
+
 
 console_handler = logging.StreamHandler()  # sends output to stderr
 console_handler.setFormatter(logging.Formatter("[%(name)s] %(message)s"))
