@@ -505,8 +505,7 @@ def decode_encoded_string(messages, length):
     # Encoded strings come in bundles of messages with leading null values to
     # pad out the string to the next full message size. We strip off the
     # leading null characters here and return the resulting string.
-    decoded_string = d.strip().replace(b'\x00', b'').replace(b'\x01', b'').replace(b'\x02', b'').replace(b'\\x00', b'').replace(b'\\x01', b'').replace(b'\\x02', b'')
-    return decoded_string
+    return d.strip().strip(b'\x00' b'\x01' b'\x02' b'\\x00' b'\\x01' b'\\x02')
 
 
 def cvn(messages):
