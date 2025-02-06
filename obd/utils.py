@@ -174,7 +174,7 @@ def scan_serial():
         possible_ports += glob.glob("/dev/ttyUSB[0-9]*")
 
     elif sys.platform.startswith('win'):
-        possible_ports += ["\\.\COM%d" % i for i in range(256)]
+        possible_ports += [r"\\.\COM%d" % i for i in range(256)]
 
     elif sys.platform.startswith('darwin'):
         exclude = [
