@@ -56,7 +56,7 @@ class OBD(object):
         self.fast = fast  # global switch for disabling optimizations
         self.timeout = timeout
         self.__last_command = b""  # used for running the previous command with a CR
-        self.__last_header = ECU_HEADER.ENGINE  # for comparing with the previously used header
+        self.__last_header = ""  # for comparing with the previously used header
         self.__frame_counts = {}  # keeps track of the number of return frames for each command
 
         logger.info("======================= python-OBD (v%s) =======================" % __version__)
