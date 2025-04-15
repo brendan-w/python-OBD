@@ -29,7 +29,7 @@ dependencies = [
     "pint==0.24.*",
 ]
 license = "GPL-2.0-only"
-license-files = ["LICENSE"]
+# license-files = ["LICENSE"]
 
 [project.urls]
 Homepage = "https://github.com/brendan-w/python-OBD"
