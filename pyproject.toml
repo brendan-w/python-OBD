@@ -28,7 +28,7 @@ dependencies = [
     "pyserial==3.*",
     "pint==0.24.*",
 ]
-license = "GPL-2.0-only"
+# license = "GPL-2.0-only"
 license-files = ["LICENSE"]
 
 [project.urls]
