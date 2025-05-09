@@ -34,3 +34,7 @@ license-files = ["LICENSE"]
 [project.urls]
 Homepage = "https://github.com/brendan-w/python-OBD"
 Issues = "https://github.com/brendan-w/python-OBD/issues"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
