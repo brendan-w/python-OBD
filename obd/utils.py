@@ -172,6 +172,7 @@ def scan_serial():
     if sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
         possible_ports += glob.glob("/dev/rfcomm[0-9]*")
         possible_ports += glob.glob("/dev/ttyUSB[0-9]*")
+        possible_ports += glob.glob("/dev/ttyACM[0-9]*")
 
     elif sys.platform.startswith('win'):
         possible_ports += [r"\\.\COM%d" % i for i in range(256)]
