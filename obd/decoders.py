@@ -299,18 +299,24 @@ def status(messages):
 
     # load the 3 base tests that are always present
     for i, name in enumerate(BASE_TESTS[::-1]):
+        if name is None:
+            continue # filter out None/reserved tests
         t = StatusTest(name, bits[13 + i], not bits[9 + i])
         output.__dict__[name] = t
 
     # different tests for different ignition types
     if bits[12]:  # compression
         for i, name in enumerate(COMPRESSION_TESTS[::-1]):  # reverse to correct for bit vs. indexing order
+            if name is None:
+                continue # filter out None/reserved tests
             t = StatusTest(name, bits[(2 * 8) + i],
                            not bits[(3 * 8) + i])
             output.__dict__[name] = t
 
     else:  # spark
         for i, name in enumerate(SPARK_TESTS[::-1]):  # reverse to correct for bit vs. indexing order
+            if name is None:
+                continue # filter out None/reserved tests
             t = StatusTest(name, bits[(2 * 8) + i],
                            not bits[(3 * 8) + i])
             output.__dict__[name] = t
