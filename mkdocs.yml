@@ -2,16 +2,16 @@ site_name: python-OBD
 repo_url: https://github.com/brendan-w/python-OBD
 repo_name: GitHub
 extra_javascript:
-- assets/extra.js
+    - assets/extra.js
 nav:
-- 'Getting Started': 'index.md'
-- 'OBD Connections': 'Connections.md'
-- 'Command Lookup': 'Command Lookup.md'
-- 'Command Tables' : 'Command Tables.md'
-- 'Responses': 'Responses.md'
-- 'Async Connections': 'Async Connections.md'
-- 'Custom Commands': 'Custom Commands.md'
-- 'Debug': 'Debug.md'
-- 'Troubleshooting': 'Troubleshooting.md'
-
+    - 'Getting Started': 'index.md'
+    - 'OBD Connections': 'Connections.md'
+    - 'Command Lookup': 'Command Lookup.md'
+    - 'Command Tables': 'Command Tables.md'
+    - 'Responses': 'Responses.md'
+    - 'Async Connections': 'Async Connections.md'
+    - 'Custom Commands': 'Custom Commands.md'
+    - 'Debug': 'Debug.md'
+    - 'Troubleshooting': 'Troubleshooting.md'
+    - 'Example: log RPM and speed to CSV': 'csv-logging.md'
 theme: readthedocs
